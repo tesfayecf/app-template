@@ -1,0 +1,15 @@
+I am considering buying a house in the next years and i want to start to search for oportuinites and track the market. I want to create a custom app to aggregate house publications accross all the known and the not so knowns house selling portals in my region and area. I assume most of them do not offer API services so scrapping wil be needed. 
+
+I am a software engineer and i have experience building complex systems with multiple services. I have a clear idea of the structure i want the product ot have. This is a clear description of the stack to use.
+
+BACKEND (/server)
+
+The app must have a GO backend that is highly efficient and robust. It must have a clear architecture with independent services (API, backoffice, authentication, data storage, scrapping...). It should not have a microservices structure but the components of the monolithic backend must be decouplable and follow a Domain Drive Design with clear separation of concerns and encapsulation. This app will have to do a lot of scrapping and for this is good to cache the retrieved information so i it does not hit rate limits. This is means a databse and no-SWL storage will be needed. Use the Garage S3 server and a SQLite. This is the best option for fast prototyping and single user scale. The backend must have an extensive suite of tests (unit, integration...) to validate the code works before pushing code to production. Use the go standard library for testing. Tests must bue self-contained and agnostic of the external services used in the codebase. Unit test must be able to run in any machine and integration test must have all the resources/mocks available. 
+
+I like things to be self contained so i have already placed the go and garage executables in the third-party folder of this project.
+
+FRONTEND (/app)
+
+The front end has to be a minimal layer on top of the backend with intelligent caching and efficency. Use a React.js + Vite as the bundler. Do not use and framework on top of React.js. Use Zustand for client state and TanStack Query for server state. Make use of reusable components and intelligent styling to improve the development speed and efficiency. For now UI is not the main concern. Keep it simple and functional. Use pnpm for node js library managment. Is already installed in the global dependencies.
+
+The workpspace is already initialized with a structure, config and docs files. 
