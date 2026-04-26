@@ -1,7 +1,14 @@
 {
-    // ----------------------------------------------------------------------
-    // GO
-    // ----------------------------------------------------------------------
-    "go.goroot": "${workspaceFolder}/third-party/go",
-    "go.gopath": "${workspaceFolder}/.go",
+    "editor.formatOnSave": true,
+    "files.trimTrailingWhitespace": true,
+    "eslint.workingDirectories": [
+        {
+            "directory": "./app",
+            "changeProcessCWD": true
+        }
+    ],
+    "go.toolsManagement.autoUpdate": true,
+    "[go]": {
+        "editor.defaultFormatter": "golang.go"
+    }
 }

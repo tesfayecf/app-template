@@ -1,3 +1,5 @@
+# Local-only Garage defaults for template experimentation.
+# Rotate tokens and addresses before using this outside a workstation.
 metadata_dir = "./.garage/meta"
 data_dir = "./.garage/data"
 db_engine = "sqlite"

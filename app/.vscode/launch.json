@@ -1,20 +1,28 @@
 {
     "version": "0.2.0",
     "configurations": [
-        // ----------------------------------------------------------------------
-        // App (NodeJS)
-        // ----------------------------------------------------------------------
         {
-            "name": "app-debug",
-            "type": "node",
+            "name": "app:dev-server",
+            "type": "node-terminal",
             "request": "launch",
-            "runtimeExecutable": "pnpm",
-            "runtimeArgs": ["run", "vite:dev"],
-            "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal",
-            "outFiles": ["${workspaceFolder}/.dist/**/*.js"],
-            "sourceMaps": true,
-            "resolveSourceMapLocations": ["${workspaceFolder}/src/**", "!**/node_modules/**"]
+            "command": "pnpm dev",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "app:browser",
+            "type": "pwa-chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/src"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "app:full-stack",
+            "configurations": [
+                "app:dev-server",
+                "app:browser"
+            ]
         }
     ]
 }

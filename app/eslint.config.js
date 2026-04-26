@@ -10,12 +10,13 @@ const reactPlugin = require("eslint-plugin-react");
 
 module.exports = defineConfig([
     {
-        ignores: ["node_modules/**"],
-        files: ["**/*.js", "**/*.ts", "**/*.tsx"],
+        ignores: ["node_modules/**", "dist/**", ".cache/**", "public/**", "eslint.config.js"],
+        files: ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
         languageOptions: {
             parser: tsParser,
             parserOptions: {
-                projectService: ["./tsconfig.json"],
+                project: "./tsconfig.json",
+                tsconfigRootDir: __dirname,
                 ecmaFeatures: {
                     jsx: true,
                 },
@@ -283,15 +284,8 @@ module.exports = defineConfig([
             ],
             // Prevent usage of the return value of React.render
             "react/no-render-return-value": "warn",
-            // Prevent usage of string literals in JSX
-            "react/jsx-no-literals": [
-                "warn",
-                {
-                    noStrings: false,
-                    allowedStrings: ["className", "style", "path"],
-                    ignoreProps: false,
-                },
-            ],
+            // Allow normal content authoring in JSX without wrapping every literal
+            "react/jsx-no-literals": "off",
             // Enforce consistent function component definition style
             "react/function-component-definition": [
                 "warn",
@@ -394,18 +388,10 @@ module.exports = defineConfig([
             "no-extra-parens": [
                 "warn",
                 "all",
-                {
-                    ignoreJSX: "multi-line",
-                    nestedBinaryExpressions: false,
-                    returnAssign: false,
-                    ternaryOperandBinaryExpressions: false,
-                },
+                { ignoreJSX: "multi-line" }
             ],
-
+            "react/jsx-curly-brace-presence": "off",
             /**
-             * Naming Conventions Rules
-             *
-             * This configuration enforces consistent naming patterns across the codebase.
              * It's organized from most specific to least specific selectors.
              *
              * Key principles:
@@ -475,7 +461,7 @@ module.exports = defineConfig([
                     selector: "variable",
                     modifiers: ["const", "global"],
                     format: ["PascalCase", "camelCase", "UPPER_CASE"],
-                    leadingUnderscore: "forbid", 
+                    leadingUnderscore: "forbid",
                     trailingUnderscore: "forbid",
                 },
                 {
