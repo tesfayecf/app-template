@@ -5,7 +5,8 @@ Opinionated starter for Go backend + React frontend products. The template is op
 ## What is included
 
 - Go API scaffold under `server/` with explicit config loading, health endpoints, request logging, graceful shutdown, and a small handler test suite.
-- React + Vite app under `app/` with React Router, React Query, a `/api` dev proxy, env examples, and an opinionated `app / features / shared` source layout.
+- React + Vite app under `app/` with React Router, React Query, a typed API client, feature service/query-key conventions, a `/api` dev proxy, env examples, and an opinionated `app / features / shared` source layout.
+- Optional SQLite infrastructure under `server/internal/sqlite/` with WAL mode, migrations, integrity checks, backups, and corrupt-file quarantine. It is enabled only when `SQLITE_PATH` is set.
 - Root VS Code tasks and launch configs for the current workspace instead of the old nested-only setup.
 - Shell helpers in `cmd/` for local development and optional SQLite or Garage workflows.
 
@@ -32,6 +33,12 @@ pnpm --dir app dev
 
 Open `http://localhost:3000`. The frontend proxies `/api` to `http://localhost:8080` during local development.
 
+To build and run the application as a single container with Nginx serving the frontend and proxying the API, see [docker/README.md](docker/README.md):
+
+```bash
+docker compose -f docker/docker-compose.yml up --build
+```
+
 ## Structure
 
 ```text
@@ -54,6 +61,7 @@ cmd/
 ## Conventions
 
 - Put product behavior in `app/src/features` first. Promote code to `shared` only when multiple features truly need it.
+- Keep API transport in `shared/api`, endpoint services and query keys beside their owning feature, and use the shared `QueryClient`.
 - Keep the backend stdlib-first until concrete pressure justifies adding a framework.
 - Treat `/api/healthz` as the first integration seam; the starter app already exercises it.
 - Use the root VS Code tasks `workspace:dev` and `workspace:check` when working from the repo root.
@@ -62,3 +70,5 @@ cmd/
 
 - `./cmd/sqlite.sh` opens a local SQLite database at `server/.tmp/app.db` by default.
 - `./cmd/garage.sh` forwards arguments to a local Garage binary when you need object storage during development.
+
+To enable the optional application SQLite package, set `SQLITE_PATH` in `server/.env`. Supply app-specific migrations to `sqlite.Migrate`; the template does not impose a product schema.
