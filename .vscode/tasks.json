@@ -89,6 +89,15 @@
             "problemMatcher": "$go"
         },
         {
+            "label": "docs:check",
+            "type": "shell",
+            "command": "node",
+            "args": [
+                "cmd/check-docs.mjs"
+            ],
+            "problemMatcher": []
+        },
+        {
             "label": "workspace:dev",
             "dependsOn": [
                 "server:run",
@@ -103,7 +112,8 @@
                 "frontend:lint",
                 "frontend:typecheck",
                 "frontend:build",
-                "server:test"
+                "server:test",
+                "docs:check"
             ],
             "dependsOrder": "sequence",
             "problemMatcher": []

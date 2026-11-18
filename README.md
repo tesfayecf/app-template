@@ -63,7 +63,7 @@ cmd/
 - Put product behavior in `app/src/features` first. Promote code to `shared` only when multiple features truly need it.
 - Keep API transport in `shared/api`, endpoint services and query keys beside their owning feature, and use the shared `QueryClient`.
 - Keep the backend stdlib-first until concrete pressure justifies adding a framework.
-- Treat `/api/healthz` as the first integration seam; the starter app already exercises it.
+- Treat `/api/health/live` and `/api/health/ready` as the first integration seam; the starter app already exercises them.
 - Use the root VS Code tasks `workspace:dev` and `workspace:check` when working from the repo root.
 
 ## Optional local services
@@ -71,4 +71,8 @@ cmd/
 - `./cmd/sqlite.sh` opens a local SQLite database at `server/.tmp/app.db` by default.
 - `./cmd/garage.sh` forwards arguments to a local Garage binary when you need object storage during development.
 
-To enable the optional application SQLite package, set `SQLITE_PATH` in `server/.env`. Supply app-specific migrations to `sqlite.Migrate`; the template does not impose a product schema.
+To enable the optional application SQLite package, set `SQLITE_PATH` in `server/.env`. At startup the API then opens the database, runs an integrity check, backs up an existing schema before pending migrations, and migrates it. Add app-specific migrations to `appMigrations` in `server/cmd/api/database.go`; the template does not impose a product schema.
+
+## For contributors and coding agents
+
+Start at [AGENTS.md](AGENTS.md). Testing and the contribution workflow are in [DEVELOP.md](DEVELOP.md), the system structure in [ARCHITECTURE.md](ARCHITECTURE.md), and project memory, decision records and workflows in [`_agents/`](_agents/README.md).

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(go test:*)",
+      "Bash(go vet:*)",
+      "Bash(go build:*)",
+      "Bash(gofmt -l:*)",
+      "Bash(pnpm --dir app lint)",
+      "Bash(pnpm --dir app typecheck)",
+      "Bash(pnpm --dir app build)",
+      "Bash(pnpm --dir app check)",
+      "Bash(pnpm --dir app exec vite build)",
+      "Bash(node cmd/check-docs.mjs)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git add:*)",
+      "Bash(git branch:*)",
+      "Bash(git switch:*)",
+      "Bash(git commit:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr create:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(docker compose:*)",
+      "Bash(docker buildx build:*)"
+    ],
+    "deny": [
+      "Read(./server/.env)",
+      "Edit(./server/.env)",
+      "Read(./app/.env)",
+      "Edit(./app/.env)",
+      "Read(./server/.tmp/backups/**)"
+    ]
+  }
+}
