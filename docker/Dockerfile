@@ -17,8 +17,8 @@ RUN --mount=type=cache,target=/pnpm/store \
 
 COPY app/ ./
 
-ARG VITE_API_ORIGIN=
-ENV VITE_API_ORIGIN=${VITE_API_ORIGIN}
+ARG VITE_API_BASE_URL=
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
 RUN --mount=type=cache,target=/pnpm/store pnpm build
 

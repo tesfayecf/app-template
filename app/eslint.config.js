@@ -9,8 +9,12 @@ const tsPlugin = require("@typescript-eslint/eslint-plugin");
 const reactPlugin = require("eslint-plugin-react");
 
 module.exports = defineConfig([
+    // A config object with only `ignores` is a global ignore; inside the object below it would
+    // only narrow that object, and ESLint would still lint the Vite cache in `.cache/`.
     {
         ignores: ["node_modules/**", "dist/**", ".cache/**", "public/**", "eslint.config.js"],
+    },
+    {
         files: ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
         languageOptions: {
             parser: tsParser,

@@ -10,11 +10,11 @@ From the repository root:
 docker buildx build --platform linux/amd64 -t app-template:local -f docker/Dockerfile . --load
 ```
 
-The command must run from the repository root so `app/`, `server/`, and `docker/` are available in the build context. Set `VITE_API_ORIGIN` with `--build-arg` when the frontend must call an API outside the container. The default empty value keeps requests same-origin through Nginx:
+The command must run from the repository root so `app/`, `server/`, and `docker/` are available in the build context. Set `VITE_API_BASE_URL` with `--build-arg` when the frontend must call an API outside the container. The default empty value keeps requests same-origin through Nginx:
 
 ```bash
 docker buildx build \
-	--build-arg VITE_API_ORIGIN=https://api.example.com \
+	--build-arg VITE_API_BASE_URL=https://api.example.com \
 	--platform linux/amd64 \
 	-t app-template:local \
 	-f docker/Dockerfile . \

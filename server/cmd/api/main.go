@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
@@ -17,16 +18,37 @@ import (
 func main() {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{}))
 
-	cfg, err := config.Load()
-	if err != nil {
-		logger.Error("load config", "error", err)
+	if err := run(logger); err != nil {
+		logger.Error("api server stopped", "error", err)
 		os.Exit(1)
 	}
 
-	server := httpapi.NewServer(cfg, logger)
+	logger.Info("api server stopped cleanly")
+}
+
+// run returns instead of exiting so deferred cleanup, such as closing the database, always runs.
+func run(logger *slog.Logger) error {
+	cfg, err := config.Load()
+	if err != nil {
+		return fmt.Errorf("load config: %w", err)
+	}
+
 	signals, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
+	db, err := openDatabase(signals, cfg.Database, appMigrations, logger)
+	if err != nil {
+		return fmt.Errorf("open database: %w", err)
+	}
+	if db != nil {
+		defer func() {
+			if err := db.Close(); err != nil {
+				logger.Error("close database", "error", err)
+			}
+		}()
+	}
+
+	server := httpapi.NewServer(cfg, logger)
 	errCh := make(chan error, 1)
 
 	go func() {
@@ -37,11 +59,10 @@ func main() {
 	select {
 	case err := <-errCh:
 		if err != nil && !errors.Is(err, http.ErrServerClosed) {
-			logger.Error("api server stopped", "error", err)
-			os.Exit(1)
+			return err
 		}
 
-		return
+		return nil
 	case <-signals.Done():
 		logger.Info("shutdown requested")
 	}
@@ -50,14 +71,12 @@ func main() {
 	defer cancel()
 
 	if err := server.Shutdown(shutdownCtx); err != nil {
-		logger.Error("shutdown failed", "error", err)
-		os.Exit(1)
+		return fmt.Errorf("shutdown: %w", err)
 	}
 
 	if err := <-errCh; err != nil && !errors.Is(err, http.ErrServerClosed) {
-		logger.Error("api server shutdown error", "error", err)
-		os.Exit(1)
+		return fmt.Errorf("shutdown: %w", err)
 	}
 
-	logger.Info("api server stopped cleanly")
+	return nil
 }

@@ -22,9 +22,7 @@ export interface ApiRequestOptions<TBody = unknown> {
 }
 
 const apiOrigin = (
-  import.meta.env.VITE_API_BASE_URL ??
-  import.meta.env.VITE_API_ORIGIN ??
-  ""
+  import.meta.env.VITE_API_BASE_URL ?? ""
 ).replace(/\/$/u, "");
 
 export async function apiRequest<TResponse, TBody = unknown>(
